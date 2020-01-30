@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.osu.capstone.project.api;
+package com.osu.capstone.project.unsecure.api;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
