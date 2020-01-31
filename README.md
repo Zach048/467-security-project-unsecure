@@ -3,7 +3,7 @@ To Run Back-End Server:
 1) Pull code from GitHub
 2) Download Eclipse
 3) Download Spring Tools from the Eclipse Marketplace
-4) Open 'unsecure-sever' as a project
+4) Go to file > import > Maven > Existing Maven Projects and then browse for the 'unsecure-server' folder and click next
 5) 
 
 
