@@ -4,29 +4,48 @@
 package com.osu.capstone.project.unsecure.dto;
 
 /**
+ * The purpose of this class is to decouple the underlying database structure from the 
+ * data available to the end user.
  * @author Zach Earl
- *
  */
 public class Account {
-	private Long accountId;
+	private Integer accountId;
 	private String checkingAccount;
 	private String creditCard;
-	private String balance;
-	private Long customerId;
+	private Double checkingBalance;
+	private Double creditCardBalance;
+	private Integer customerId;
 	
-	public Account(Long accountId, String checkingAccount, String creditCard, String balance, Long customerId) {
+	public Account(Integer accountId, String checkingAccount, String creditCard, Double checkingBalance, Double creditCardBalance, Integer customerId) {
 		this.accountId = accountId;
 		this.checkingAccount = checkingAccount;
 		this.creditCard = creditCard;
-		this.balance = balance;
+		this.checkingBalance = checkingBalance;
+		this.creditCardBalance = creditCardBalance;
 		this.customerId = customerId;
 	}
 
-	public Long getAccountId() {
+	public void setCheckingBalance(Double checkingBalance) {
+		this.checkingBalance = checkingBalance;
+	}
+
+	public void setCreditCardBalance(Double creditCardBalance) {
+		this.creditCardBalance = creditCardBalance;
+	}
+	
+	public Double getCheckingBalance() {
+		return checkingBalance;
+	}
+
+	public Double getCreditCardBalance() {
+		return creditCardBalance;
+	}
+
+	public Integer getAccountId() {
 		return accountId;
 	}
 
-	public void setAccountId(Long accountId) {
+	public void setAccountId(Integer accountId) {
 		this.accountId = accountId;
 	}
 
@@ -46,19 +65,11 @@ public class Account {
 		this.creditCard = creditCard;
 	}
 
-	public String getBalance() {
-		return balance;
-	}
-
-	public void setBalance(String balance) {
-		this.balance = balance;
-	}
-
-	public Long getCustomerId() {
+	public Integer getCustomerId() {
 		return customerId;
 	}
 
-	public void setCustomerId(Long customerId) {
+	public void setCustomerId(Integer customerId) {
 		this.customerId = customerId;
 	}
 }

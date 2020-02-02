@@ -6,30 +6,82 @@ package com.osu.capstone.project.unsecure.dao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.apache.commons.lang3.RandomStringUtils;
 
+import com.osu.capstone.project.unsecure.dto.Account;
 import com.osu.capstone.project.unsecure.dto.Customer;
 
 /**
+ * Represents an interface between the {@link Customer} DTO and the underlying database table.
  * @author Zach Earl
- *
  */
 @Repository
 public class CustomerDAO {
+	
 	@Autowired
 	private JdbcTemplate template;
 	
-	public Customer getCustomer(Long id) {
-		String query = "SELECT ID, First_Name, Last_Name, Username, Password, Email, Phone FROM Customer WHERE ID = " + id;
+	@Autowired
+	AccountDAO accountDao;
+	
+	public Customer getCustomer(Integer id) {
+		String query = "SELECT id, first_name, last_name, username, password, email, phone FROM customer WHERE id = " + id;
 		return template.queryForObject(query,(rs, rowNum) ->
 		new Customer(
-				rs.getLong("ID"),
-				rs.getString("Username"),
-				rs.getString("Password"),
-				rs.getString("First_Name"),
-				rs.getString("Last_name"),
-				rs.getString("Email"),
-				rs.getString("Phone")
+				rs.getInt("id"),
+				rs.getString("username"),
+				rs.getString("password"),
+				rs.getString("first_name"),
+				rs.getString("last_name"),
+				rs.getString("email"),
+				rs.getString("phone")
 			)
 		);	
+	}
+	
+	public Customer login(String userName, String password) {
+		String query = "SELECT id, first_name, last_name, username, password, email, phone FROM customer WHERE username = " + userName;
+			Customer c = template.queryForObject(query,(rs, rowNum) ->
+			new Customer(
+					rs.getInt("id"),
+					rs.getString("username"),
+					rs.getString("password"),
+					rs.getString("first_name"),
+					rs.getString("last_name"),
+					rs.getString("email"),
+					rs.getString("phone")
+				)
+			);
+		// authenticate customer 
+		if(c.getCustomerId() != null && password == c.getPassword()) {
+			return c;
+		}
+//		else if(c.getCustomerId() == null) {
+//			c.setFirstName("John");
+//			c.setLastName("Doe");
+//			c.setEmail("john.doe@oregonstate.edu");
+//			c.setPhone("555-555-5555");
+//			addCustomer(c);
+//			
+//			Account newCustomerAccount = new Account(null, RandomStringUtils.random(9, "1234567890"), RandomStringUtils.random(16, "1234567890"), 1650.00, 1230.00, c.getCustomerId(), 4);
+//			accountDao.addAccount(newCustomerAccount);
+//			
+//			return c.getCustomerId();
+//		}
+		// customer failed authentication
+		else {
+			return null;
+		}
+	}
+	
+	public void addCustomer(Customer c) {
+		String query = "INSERT INTO customer (first_name, last_name, username, password, email, phone) VALUES(?, ?, ?, ?, ?, ?)";
+		template.update(query, c.getFirstName(), c.getLastName(), c.getUserName(), c.getPassword(), c.getEmail(), c.getPhone());
+	}
+	
+	public void updateCustomer(Customer c) {
+		String query = "UPDATE customer SET first_name = ?, last_name = ?, username = ?, password = ?, email = ?, phone = ? WHERE id = ?";
+		template.update(query, c.getFirstName(), c.getLastName(), c.getUserName(), c.getPassword(), c.getEmail(), c.getPhone(), c.getCustomerId());
+
 	}
 }

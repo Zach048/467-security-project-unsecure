@@ -5,12 +5,13 @@ package com.osu.capstone.project.unsecure.dto;
 
 
 /**
+ * The purpose of this class is to decouple the underlying database structure from the 
+ * data available to the end user.
  * @author Zach Earl
- *
  */
 public class Customer {
 	
-	private Long customerId;
+	private Integer customerId;
 	private String userName;
 	private String password;
 	private String firstName;
@@ -18,7 +19,7 @@ public class Customer {
 	private String email;
 	private String phone;
 	
-	public Customer(Long customerId, String userName, String password, String firstName, String lastName, String email,
+	public Customer(Integer customerId, String userName, String password, String firstName, String lastName, String email,
 			String phone) {
 		this.customerId = customerId;
 		this.userName = userName;
@@ -29,11 +30,11 @@ public class Customer {
 		this.phone = phone;
 	}
 
-	public Long getCustomerId() {
+	public Integer getCustomerId() {
 		return customerId;
 	}
 
-	public void setCustomerId(Long customerId) {
+	public void setCustomerId(Integer customerId) {
 		this.customerId = customerId;
 	}
 
