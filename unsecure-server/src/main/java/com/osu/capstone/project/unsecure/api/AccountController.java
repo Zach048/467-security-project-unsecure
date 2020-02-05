@@ -46,8 +46,8 @@ public class AccountController {
 	}
 	
 	@CrossOrigin(origins="*")
-	@PostMapping("payCreditCard")
-	public void payCreditCard(@RequestBody Double amountPaid, @RequestBody Account a) {
+	@PostMapping("payCreditCard/{amountPaid}")
+	public void payCreditCard(@PathVariable Double amountPaid, @RequestBody Account a) {
 		dao.payBalance(amountPaid, a);
 	}
 
