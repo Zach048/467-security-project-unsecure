@@ -39,8 +39,9 @@ public class CustomerDAO {
 		);	
 	}
 	
-	public Customer login(String userName, String password) {
-		String query = "SELECT id, first_name, last_name, username, password, email, phone FROM customer WHERE username = " + userName;
+	public Integer login(String userName, String password) {
+		String query = "SELECT id, first_name, last_name, username, password, email, phone FROM customer WHERE username = " + "'"+userName+"'";
+		System.out.println(query);
 			Customer c = template.queryForObject(query,(rs, rowNum) ->
 			new Customer(
 					rs.getInt("id"),
@@ -53,8 +54,8 @@ public class CustomerDAO {
 				)
 			);
 		// authenticate customer 
-		if(c.getCustomerId() != null && password == c.getPassword()) {
-			return c;
+		if(c.getCustomerId() != null && password.equals(c.getPassword())) {
+			return c.getCustomerId();
 		}
 //		else if(c.getCustomerId() == null) {
 //			c.setFirstName("John");
@@ -70,7 +71,7 @@ public class CustomerDAO {
 //		}
 		// customer failed authentication
 		else {
-			return null;
+			return -1;
 		}
 	}
 	

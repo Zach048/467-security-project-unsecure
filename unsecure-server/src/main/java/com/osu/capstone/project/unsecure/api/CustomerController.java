@@ -21,6 +21,7 @@ import com.osu.capstone.project.unsecure.dto.Customer;
  * 
  * @author Zach Earl
  */
+@CrossOrigin(origins="*")
 @RestController
 @RequestMapping("customer")
 public class CustomerController {
@@ -46,9 +47,9 @@ public class CustomerController {
 		dao.updateCustomer(c);
 	}
 	
-	@CrossOrigin(origins="*")
-	@PostMapping("login")
-	public Customer login(@RequestBody String userName, @RequestBody String password) {
+	@CrossOrigin(origins="http://localhost:4200")
+	@PostMapping("login/{userName}")
+	public Integer login(@PathVariable String userName, @RequestBody String password) {
 		return dao.login(userName, password);
 	}
 
