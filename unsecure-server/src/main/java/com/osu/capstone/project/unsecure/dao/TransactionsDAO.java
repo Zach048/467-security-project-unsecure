@@ -21,8 +21,11 @@ public class TransactionsDAO {
 	@Autowired
 	private JdbcTemplate template;
 	
-	public List<Transactions> getTransactions(Integer accountId) {
-		String query = "SELECT id, account_id, vendor_name, amount_paid FROM transactions WHERE account_id = " + accountId;
+	public List<Transactions> getTransactions(Integer customerId) {
+
+		String query = "SELECT t.id, account_id, vendor_name, amount_paid FROM transactions t"
+				+ " INNER JOIN account ON t.account_id = account.id WHERE "
+				+ "account.customer_id = " + customerId;
 		return template.query(query,(rs, rowNum) ->
 		new Transactions(
 				rs.getInt("id"),

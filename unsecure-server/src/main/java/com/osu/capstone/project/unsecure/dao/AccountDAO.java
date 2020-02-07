@@ -24,9 +24,9 @@ public class AccountDAO {
 	@Autowired 
 	private TransactionsDAO transactionsDao;
 	
-	public Account getAccount(Integer id) {
+	public Account getAccount(Integer customerId) {
 		String query = "SELECT id, customer_id, checking_balance, credit_card_balance, " + 
-						"credit_card, checking_account FROM account WHERE id = " + id;
+						"credit_card, checking_account FROM account WHERE id = " + customerId;
 		return template.queryForObject(query,(rs, rowNum) ->
 		new Account(
 				rs.getInt("id"),
@@ -38,7 +38,6 @@ public class AccountDAO {
 			)
 		);	
 	}
-	
 	
 	public void addAccount(Account a) {
 		String query = "INSERT INTO account (customer_id, checking_balance, credit_card_balance, credit_card, checking_account) VALUES(?, ?, ?, ?, ?)";

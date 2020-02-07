@@ -28,9 +28,9 @@ public class TransactionsController {
 	@Autowired
 	TransactionsDAO dao;
 	
-	@GetMapping("account/{accountId}")
-	public List<Transactions> getTransactions(@PathVariable Integer accountId) {
-		return dao.getTransactions(accountId);
+	@GetMapping("account/{customerId}")
+	public List<Transactions> getTransactions(@PathVariable Integer customerId) {
+		return dao.getTransactions(customerId);
 	}
 	
 	@PostMapping("new")

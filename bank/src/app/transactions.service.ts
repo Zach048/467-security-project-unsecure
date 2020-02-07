@@ -2,18 +2,21 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ITransactions } from './transactions';
 import { Observable } from 'rxjs';
+import { LoginService } from './login.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TransactionsService {
 
-    // private _url: string = "/assets/data/transactions.json"
-    private _url: string = "http://localhost:8080/transactions/account/2"
+    private _url: string = "http://localhost:8080/transactions/account/"
+    customerId: any;
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient, private login: LoginService) { 
+      this.login.currentId.subscribe(customerId => this.customerId = customerId)
+    }
   
     getTransactions(): Observable<ITransactions[]>{
-      return this.http.get<ITransactions[]>(this._url);
+      return this.http.get<ITransactions[]>(this._url+this.customerId);
     }
 }

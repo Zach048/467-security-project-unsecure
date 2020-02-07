@@ -26,9 +26,9 @@ public class AccountController {
 	@Autowired
 	AccountDAO dao;
 	
-	@GetMapping("id/{accountId}")
-	public Account getAccount(@PathVariable Integer accountId) {
-		return dao.getAccount(accountId);
+	@GetMapping("id/{customerId}")
+	public Account getAccount(@PathVariable Integer customerId) {
+		return dao.getAccount(customerId);
 	}
 	
 	@PostMapping("new")
