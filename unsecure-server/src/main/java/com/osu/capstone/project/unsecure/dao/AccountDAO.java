@@ -46,7 +46,7 @@ public class AccountDAO {
 	}
 	
 	public void updateAccount(Account a) {
-		String query = "UPDATE account SET customer_id = ?, checking_balance = ?, credit_card_balance = ?, credit_card = ?, checking_account = ?, id = ?";
+		String query = "UPDATE account SET customer_id = ?, checking_balance = ?, credit_card_balance = ?, credit_card = ?, checking_account = ? WHERE id = ?";
 		template.update(query, a.getCustomerId(), a.getCheckingBalance(), a.getCreditCardBalance(), a.getCreditCard(), a.getCheckingAccount(), a.getAccountId());
 
 	}

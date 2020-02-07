@@ -6,7 +6,6 @@ package com.osu.capstone.project.unsecure.api;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,20 +28,17 @@ public class TransactionsController {
 	@Autowired
 	TransactionsDAO dao;
 	
-	@CrossOrigin(origins="*")
 	@GetMapping("account/{accountId}")
 	public List<Transactions> getTransactions(@PathVariable Integer accountId) {
 		return dao.getTransactions(accountId);
 	}
 	
-	@CrossOrigin(origins="*")
-	@PostMapping("newTransaction")
+	@PostMapping("new")
 	public void newTransaction(@RequestBody Transactions t) {
 		dao.addTransaction(t);
 	}
 	
-	@CrossOrigin(origins="*")
-	@PutMapping("updateTransaction")
+	@PutMapping("update")
 	public void updateTransaction(@RequestBody Transactions t) {
 		dao.updateTransaction(t);
 	}

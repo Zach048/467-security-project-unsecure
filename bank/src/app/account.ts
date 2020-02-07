@@ -2,7 +2,7 @@ export interface IAccount {
    accountId: number,
    checkingAccount: number,
    creditCard: string,
-   accountBalance: number,
+   checkingBalance: number,
    creditCardBalance: number,
    customerId: number
 }

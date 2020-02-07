@@ -4,7 +4,6 @@
 package com.osu.capstone.project.unsecure.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +20,6 @@ import com.osu.capstone.project.unsecure.dto.Customer;
  * 
  * @author Zach Earl
  */
-@CrossOrigin(origins="*")
 @RestController
 @RequestMapping("customer")
 public class CustomerController {
@@ -29,25 +27,21 @@ public class CustomerController {
 	@Autowired
 	private CustomerDAO dao;
 	
-	@CrossOrigin(origins="*")
 	@GetMapping("id/{customerId}")
 	public Customer getCustomer(@PathVariable Integer customerId) {
 		return dao.getCustomer(customerId);
 	}
 	
-	@CrossOrigin(origins="*")
-	@PostMapping("newCustomer")
+	@PostMapping("new")
 	public void newCustomer(@RequestBody Customer c) {
 		dao.addCustomer(c);
 	}
 	
-	@CrossOrigin(origins="*")
-	@PutMapping("newCustomer")
+	@PutMapping("update")
 	public void updateCustomer(@RequestBody Customer c) {
 		dao.updateCustomer(c);
 	}
 	
-	@CrossOrigin(origins="http://localhost:4200")
 	@PostMapping("login/{userName}")
 	public Integer login(@PathVariable String userName, @RequestBody String password) {
 		return dao.login(userName, password);

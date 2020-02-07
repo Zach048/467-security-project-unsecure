@@ -39,7 +39,7 @@ public class TransactionsDAO {
 	}
 	
 	public void updateTransaction(Transactions t) {
-		String query = "UPDATE transactions SET account_id = ?, vendor_name = ?, amount_paid = ?, id = ?";
+		String query = "UPDATE transactions SET account_id = ?, vendor_name = ?, amount_paid = ? WHERE id = ?";
 		template.update(query, t.getAccountId(), t.getVendorName(), t.getAmountPaid(), t.getTransactionId());
 
 	}

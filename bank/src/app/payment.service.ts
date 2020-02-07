@@ -6,11 +6,9 @@ import { HttpClient } from "@angular/common/http";
 })
 export class PaymentService {
 
-  _url = 'http://localhost:3000/payment';
-
   constructor(private _http: HttpClient) { }
 
-  register(userData){
-    return this._http.post<any>(this._url, userData);
+  register(url, userData){
+    return this._http.post<any>(url, userData);
   }
 }

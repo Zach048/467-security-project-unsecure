@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 export class TransactionsService {
 
     // private _url: string = "/assets/data/transactions.json"
-    private _url: string = "http://localhost:8080/transactions/account/1"
+    private _url: string = "http://localhost:8080/transactions/account/2"
 
     constructor(private http: HttpClient) { }
   

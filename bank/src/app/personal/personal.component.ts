@@ -29,10 +29,17 @@ export class PersonalComponent implements OnInit {
       .subscribe(data => this.customer = data);
   }
 
+  updateCustomer() {
+      for (let key in this.personalForm.value) {
+        this.customer[key] = this.personalForm.value[key];
+    }
+  }
+
   onSubmit(){
     this.submitted = true;
-    console.log(this.personalForm.value);
-    this._registrationService.register(this.personalForm.value)
+    this.updateCustomer()
+    console.log(this.customer);
+    this._registrationService.register(this.customer)
       .subscribe(
         response => console.log('Successfully updated customer information', response),
         error => console.error('Error updating customer information', error)

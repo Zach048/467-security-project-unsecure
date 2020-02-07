@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
 
   constructor(private _loginService: LoginService, private router: Router) { }
 
-  public customerId = {};
+  public customerId: number;
 
   ngOnInit() {}
 
@@ -30,7 +30,8 @@ export class LoginComponent implements OnInit {
       .subscribe((customerId: any) => {
         if(<number>customerId != -1) {
           this.customerId = customerId;
-          console.log(customerId);
+          this._loginService.getCustomerId(this.customerId);
+          console.log(this.customerId);
           this.router.navigate(['/dashboard']);
 
         }

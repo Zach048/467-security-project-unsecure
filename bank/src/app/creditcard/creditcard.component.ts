@@ -11,11 +11,12 @@ import { Router } from '@angular/router'
 })
 export class CreditcardComponent implements OnInit {
   public account = {};
+  _url = 'http://localhost:8080/account/payCreditCard/';
   editable = true;
 
   creditForm = new FormGroup({
     checkingAccount: new FormControl(''),
-    accountBalance: new FormControl(''),
+    checkingBalance: new FormControl(''),
     creditCard: new FormControl(''),
     creditCardBalance: new FormControl(''),
     creditCardPayment: new FormControl('', Validators.min(0))
@@ -60,7 +61,7 @@ export class CreditcardComponent implements OnInit {
   onSubmit(){
     if(this.validatePayment(this.creditForm.value.creditCardPayment)){
       console.log(this.creditForm.value);
-      this._paymentService.register(this.creditForm.value)
+      this._paymentService.register(this._url+this.creditForm.value.creditCardPayment, this.account)
         .subscribe(
           response => console.log('Successfully submitted credit card payment', response),
           error => console.error('Error processing credit card payment', error)
