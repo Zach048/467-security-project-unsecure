@@ -51,8 +51,10 @@ public class AccountDAO {
 	}
 	
 	public void payBalance(Double amountPaid, Account a) {
-		// set new balance
+		// set new credit card balance
 		a.setCreditCardBalance(a.getCreditCardBalance() - amountPaid);
+		//set new checking account balance
+		a.setCheckingBalance(a.getCheckingBalance() - amountPaid);
 		// update account to reflect new balance 
 		updateAccount(a);
 		Transactions creditCardPayment = new Transactions(null, a.getAccountId(), "Credit Card Payment", amountPaid);

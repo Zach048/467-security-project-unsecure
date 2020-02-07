@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { LoginService } from '../login.service';
 import { Router } from '@angular/router'
+import { AuthService } from '../services/auth.service'
 
 @Component({
   selector: 'app-login',
@@ -17,11 +18,13 @@ export class LoginComponent implements OnInit {
     password: new FormControl('')
   });
 
-  constructor(private _loginService: LoginService, private router: Router) { }
+  constructor(private _loginService: LoginService, private router: Router, private authService: AuthService) { }
 
   public customerId: number;
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.authService.logout();
+  }
 
   onSubmit(){
     this.submitted = true;
@@ -32,8 +35,11 @@ export class LoginComponent implements OnInit {
           this.customerId = customerId;
           this._loginService.getCustomerId(this.customerId);
           console.log(this.customerId);
-          this.router.navigate(['/dashboard']);
 
+          localStorage.setItem('isLoggedIn', 'true');
+          localStorage.setItem('token', this.loginForm.value['username']);
+
+          this.router.navigate(['/dashboard']);
         }
         else{
           alert("Invalid username, password, or combination!")

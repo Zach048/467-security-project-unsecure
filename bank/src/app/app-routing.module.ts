@@ -5,13 +5,14 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { TransactionsComponent } from './transactions/transactions.component';
 import { CreditcardComponent } from './creditcard/creditcard.component';
 import { PersonalComponent } from './personal/personal.component';
+import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   {path:'', component: LoginComponent},
-  {path:'dashboard', component: DashboardComponent},
-  {path:'transactions', component: TransactionsComponent},
-  {path:'credit', component: CreditcardComponent},
-  {path:'personal', component: PersonalComponent}
+  {path:'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
+  {path:'transactions', component: TransactionsComponent, canActivate: [AuthGuard]},
+  {path:'credit', component: CreditcardComponent, canActivate: [AuthGuard]},
+  {path:'personal', component: PersonalComponent, canActivate: [AuthGuard]}
 ];
 
 @NgModule({
