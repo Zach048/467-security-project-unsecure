@@ -33,7 +33,8 @@ export class LoginComponent implements OnInit {
       .subscribe((customerId: any) => {
         if(<number>customerId != -1) {
           this.customerId = customerId;
-          this._loginService.getCustomerId(this.customerId);
+          localStorage.setItem('customerId', String(this.customerId));
+          this._loginService.getCustomerId(String(this.customerId));
           console.log(this.customerId);
 
           localStorage.setItem('isLoggedIn', 'true');

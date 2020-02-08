@@ -9,12 +9,12 @@ export class LoginService {
 
   _url = 'http://localhost:8080/customer/login/';
   httpOptions = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
-  private customerId = new BehaviorSubject<number>(null);
+  private customerId = new BehaviorSubject<String>(localStorage.getItem('customerId'));
   currentId = this.customerId.asObservable();
   
   constructor(private _http: HttpClient) { }
 
-  getCustomerId(id: number) {
+  getCustomerId(id: String) {
     this.customerId.next(id)
   }
 
