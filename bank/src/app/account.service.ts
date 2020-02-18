@@ -3,13 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { IAccount } from './account';
 import { Observable } from 'rxjs';
 import { LoginService } from './login.service';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AccountService {
 
-  private _url: string = "http://localhost:8080/account/id/"
+  private _url: string = environment.API_URL+"account/id/";
   customerId: any;
 
   constructor(private http: HttpClient, private login: LoginService) { 

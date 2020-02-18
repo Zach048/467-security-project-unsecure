@@ -10,7 +10,7 @@ import { Router } from '@angular/router'
   styleUrls: ['./personal.component.css']
 })
 export class PersonalComponent implements OnInit {
-  public customer = {};
+  public customer: any = {};
   submitted = false;
 
   personalForm = new FormGroup({

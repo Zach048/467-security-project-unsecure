@@ -2,9 +2,10 @@ package com.osu.capstone.project.unsecure;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 @SpringBootApplication
-public class UnsecureApplication {
+public class UnsecureApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
 		SpringApplication.run(UnsecureApplication.class, args);

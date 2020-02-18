@@ -54,21 +54,9 @@ public class CustomerDAO {
 				)
 			);
 		// authenticate customer 
-		if(c.getCustomerId() != null && password.equals(c.getPassword())) {
+		if(c.getCustomerId() != null && encryptPassword(password).equals(c.getPassword())) {
 			return c.getCustomerId();
 		}
-//		else if(c.getCustomerId() == null) {
-//			c.setFirstName("John");
-//			c.setLastName("Doe");
-//			c.setEmail("john.doe@oregonstate.edu");
-//			c.setPhone("555-555-5555");
-//			addCustomer(c);
-//			
-//			Account newCustomerAccount = new Account(null, RandomStringUtils.random(9, "1234567890"), RandomStringUtils.random(16, "1234567890"), 1650.00, 1230.00, c.getCustomerId(), 4);
-//			accountDao.addAccount(newCustomerAccount);
-//			
-//			return c.getCustomerId();
-//		}
 		// customer failed authentication
 		else {
 			return -1;
@@ -84,5 +72,11 @@ public class CustomerDAO {
 		String query = "UPDATE customer SET first_name = ?, last_name = ?, username = ?, password = ?, email = ?, phone = ? WHERE id = ?";
 		template.update(query, c.getFirstName(), c.getLastName(), c.getUserName(), c.getPassword(), c.getEmail(), c.getPhone(), c.getCustomerId());
 
+	}
+	
+	public String encryptPassword(String password) {
+		String query = "SELECT password FROM customer WHERE password = SHA1("+"'"+password+"'"+")";
+		return template.queryForObject(query, String.class);	
+		
 	}
 }

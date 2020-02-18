@@ -8,8 +8,8 @@ import { AccountService } from '../account.service';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  public customer = {};
-  public account = {};
+  public customer: any = {};
+  public account: any = {};
 
   constructor(private _customerService: CustomerService, private _accountService: AccountService) { }
 

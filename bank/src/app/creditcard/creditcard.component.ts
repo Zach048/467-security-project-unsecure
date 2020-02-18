@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AccountService } from '../account.service';
 import { PaymentService } from '../payment.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Router } from '@angular/router'
+import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-creditcard',
@@ -10,8 +11,8 @@ import { Router } from '@angular/router'
   styleUrls: ['./creditcard.component.css']
 })
 export class CreditcardComponent implements OnInit {
-  public account = {};
-  _url = 'http://localhost:8080/account/payCreditCard/';
+  public account: any = {};
+  _url = environment.API_URL+'account/payCreditCard/';
   editable = true;
 
   creditForm = new FormGroup({
