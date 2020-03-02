@@ -21,22 +21,22 @@ var pool = mysql.createPool({
 	
 });
 
-app.get('/customer/:id',(req, res, next) => {
-	let context = {};
-    let query = "SELECT id, first_name, last_name, username, password, email, phone FROM customer WHERE id = " + req.param.id;
-	pool.query(query, (err, result) => {
-		if(err) {
-			next(err);
-			return;
-		}
-		context.customer = result;
-		res.render('customer', context);
-    });
-});
+// app.get('/customer/:id',(req, res, next) => {
+// 	let context = {};
+//     let query = "SELECT id, first_name, last_name, username, password, email, phone FROM customer WHERE id = " + req.param.id;
+// 	pool.query(query, (err, result) => {
+// 		if(err) {
+// 			next(err);
+// 			return;
+// 		}
+// 		context.customer = result;
+// 		res.render('/dashboard', context);
+//     });
+// });
 
-app.post('/customer/login/:userName',(req, res, next) => {
+app.post('/login/:userName',(req, res, next) => {
 	let context = {};
-    let query = "SELECT id, first_name, last_name, username, password, email, phone FROM customer WHERE username = " + req.params.userName;
+    let query = "SELECT id, first_name, username, account_id, checking_account, checking_account_balance, credit_card, credit_card_balance FROM customer INNER JOIN account ON id = account.customer_id WHERE username = " + req.params.userName;
 	pool.query(query, (err, result) => {
 		if(err) {
 			next(err);
@@ -44,62 +44,62 @@ app.post('/customer/login/:userName',(req, res, next) => {
 		}
         context.customer = result;
         if(encryptPassword(req.body.password) === context.customer.password) {
-            res.send(context.customer.id);
+            res.render('/dasboard', context);
         }
         else {
-            res.send(-1);
+            res.redirect('/login');
         }
     });
 });
 
-app.put('/customer/update/:id', (req, res, next) => {
+app.put('/personal/update/:id', (req, res, next) => {
     let query = "UPDATE customer SET first_name = ?, last_name = ?, username = ?, password = SHA1(?), email = ?, phone = ? WHERE id = ?";
     pool.query(query, [req.body.first_name, req.body.last_name, req.body.username, req.body.password, req.body.email, req.body.phone, req.params.id] , (err, result) => {
 		if(err) {
 			next(err);
             return;       
         }
-        res.redirect('/customer');
+        res.redirect('/dashboard');
 
 });
 
-app.get('/account/:id',(req, res, next) => {
-	let context = {};
-    let query = query = "SELECT id, customer_id, checking_balance, credit_card_balance, credit_card, checking_account FROM account WHERE id = " + req.params.id;
-	pool.query(query, (err, result) => {
-		if(err) {
-			next(err);
-			return;
-		}
-		context.account = result;
-		res.render('customer', context);
-    });
-});
+// app.get('/account/:id',(req, res, next) => {
+// 	let context = {};
+//     let query = query = "SELECT id, customer_id, checking_balance, credit_card_balance, credit_card, checking_account FROM account WHERE id = " + req.params.id;
+// 	pool.query(query, (err, result) => {
+// 		if(err) {
+// 			next(err);
+// 			return;
+// 		}
+// 		context.account = result;
+// 		res.render('/dashboard', context);
+//     });
+// });
 
-app.put('/account/update/:id', (req, res, next) => {
-    let query = "UPDATE account SET customer_id = ?, checking_balance = ?, credit_card_balance = ?, credit_card = ?, checking_account = ? WHERE id = ?";
-    pool.query(query, [req.body.customer_id, req.body.checking_balance, req.body.credit_card_balance, req.body.credit_card, req.body.checking_account, req.params.id] , (err, result) => {
-		if(err) {
-			next(err);
-            return;       
-        }
-        res.redirect('/customer');
+// app.put('/account/update/:id', (req, res, next) => {
+//     let query = "UPDATE account SET customer_id = ?, checking_balance = ?, credit_card_balance = ?, credit_card = ?, checking_account = ? WHERE id = ?";
+//     pool.query(query, [req.body.customer_id, req.body.checking_balance, req.body.credit_card_balance, req.body.credit_card, req.body.checking_account, req.params.id] , (err, result) => {
+// 		if(err) {
+// 			next(err);
+//             return;       
+//         }
+//         res.redirect('/dashboard');
 
-});
+// });
 
-app.put('/account/payCreditCard/:amountPaid', (req, res, next) => {
+app.put('/creditcard/payCreditCard/:amountPaid', (req, res, next) => {
     let context = {}
     let creditCardBalance = req.body.credit_card_balance - req.params.amountPaid;
     let checkingAccountBalance = req.body.checking_account - req.params.amontPaid;
     let query = "UPDATE account SET customer_id = ?, checking_balance = ?, credit_card_balance = ?, credit_card = ?, checking_account = ? WHERE id = ?";
-    pool.query(query, [req.body.customer_id, checkingAccountBalance, creditCardBalance, req.body.credit_card, req.body.checking_account, req.params.id] , (err, result) => {
+    pool.query(query, [req.body.customer_id, checkingAccountBalance, creditCardBalance, req.body.credit_card, req.body.checking_account, req.body.id] , (err, result) => {
 		if(err) {
 			next(err);
             return;       
         }
         context.account = result;
         addTransaction(result);
-        res.redirect('/customer');
+        res.redirect('/dashboard');
 });
 
 app.get('/transactions/:id', (req, res, next) => {
@@ -111,7 +111,7 @@ app.get('/transactions/:id', (req, res, next) => {
 			return;
 		}
 		context.transactions = result;
-		res.render('transactons', context);
+		res.render('/transactons', context);
     });
 });
 
@@ -124,7 +124,7 @@ app.get('/transactions/:id/:vendor', (req, res, next) => {
 			return;
 		}
 		context.transactions = result;
-		res.render('transactons', context);
+		res.render('/dashboard', context);
     });
 });
 
