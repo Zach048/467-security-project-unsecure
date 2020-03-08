@@ -1,4 +1,5 @@
 var express = require('express');
+var path = require('path');
 var app = express();
 var handlebars = require('express-handlebars').create({ defaultLayout: 'main' });
 var bodyParser = require('body-parser');
@@ -7,21 +8,22 @@ var methodOverride = require('method-override');
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
+app.use(express.static(path.join(__dirname, 'public')));
 app.set('port', 8080);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(express.static('public'));
+// app.use(express.static('public'));
 app.use(methodOverride('_method'));
 
 var pool = mysql.createPool({
-    host            : 'www.remotemysql.com',
-    user            : 'ubBDTzzpf9',
-    password        : 'uIJXame9wr',
-    database        : 'ubBDTzzpf9',
+    host            : 'database-capstone.c6nwxt2eiuvs.us-east-1.rds.amazonaws.com',
+    user            : 'admin',
+    password        : '$3cur1ty467',
+    database        : 'unsecured_bank',
     debug           : true
 });
 
-/*
+
 function encryptPassword(password) {
     let context = {};
     let query = "SELECT password FROM customer WHERE password = SHA1("+"'"+password+"'"+")";
@@ -35,7 +37,6 @@ function encryptPassword(password) {
         return context.customer.password;
     });   
 };
-*/
 
 app.get('/', function(req, res, next) {
 	res.render('login');
@@ -53,14 +54,19 @@ app.post('/login',(req, res, next) => {
 			return;
 		}
         context.customer = result[0];
-        res.redirect('/dashboard/' + context.customer.id);
+        if(encryptPassword(req.body.password) === context.customer.password) {
+            res.redirect('/dashboard/' + context.customer.id);
+        }
+        else {
+            res.redirect('/login');
+        }
     });
 });
 
 
 app.get('/dashboard/:id',(req, res, next) => {
     let context = {}
-    let query = "SELECT customer.id, customer.first_name, account.checking_account, account.checking_balance, account.credit_card, account.credit_card_balance FROM customer INNER JOIN account ON customer.id = account.customer_id WHERE customer.id = " + "'"+req.params.id+"'";
+    let query = "SELECT customer.id, customer.first_name, account.checking_account, account.checking_balance, account.credit_card, account.credit_card_balance, account.id AS account_id FROM customer INNER JOIN account ON customer.id = account.customer_id WHERE customer.id = " + "'"+req.params.id+"'";
 	pool.query(query, (err, result) => {
 		if(err) {
             next(err);
@@ -141,16 +147,16 @@ app.get('/transactions/:id', (req, res, next) => {
 /*
  *  TO DO: implement search for transaction by vendor
  */
-app.get('/transactions/:id/:vendor', (req, res, next) => {
+app.get('/search/:id', (req, res, next) => {
     let context = {};
-    let query = "SELECT id, account_id, vendor_name, amount_paid FROM transaction WHERE account_id = " + req.params.id + " AND vendor_name LIKE " + "'%"+req.params.vendor+"%'";
+    let query = "SELECT * FROM transactions WHERE account_id = " + req.params.id + " AND vendor_name LIKE " + "'%"+req.query.vendor+"%'";
 	pool.query(query, (err, result) => {
 		if(err) {
 			next(err);
 			return;
 		}
 		context.transactions = result;
-		res.render('dashboard', context);
+		res.render('transactions', context);
     });
 });
 
