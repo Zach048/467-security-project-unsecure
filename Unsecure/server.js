@@ -23,6 +23,7 @@ var pool = mysql.createPool({
     debug           : true
 });
 
+var global_password;
 
 function encryptPassword(password) {
     let context = {};
@@ -42,9 +43,6 @@ app.get('/', function(req, res, next) {
 	res.render('login');
 });
 
-/*
- *  TO DO: implement password authentication with encryption
- */
 app.post('/login',(req, res, next) => {
     let context = {};
     let query = "SELECT id FROM customer WHERE username = " + "'"+req.body.username+"'";
@@ -55,6 +53,7 @@ app.post('/login',(req, res, next) => {
 		}
         context.customer = result[0];
         if(encryptPassword(req.body.password) === context.customer.password) {
+            global_password = context.customer.password;
             res.redirect('/dashboard/' + context.customer.id);
         }
         else {
@@ -62,7 +61,6 @@ app.post('/login',(req, res, next) => {
         }
     });
 });
-
 
 app.get('/dashboard/:id',(req, res, next) => {
     let context = {}
@@ -85,7 +83,8 @@ app.get('/personal/:id',(req, res, next) => {
  			next(err);
  			return;
  		}
- 		context.customer = result[0];
+        context.customer = result[0];
+        context.customer.password = global_password; 
  		res.render('personal', context);
     });
 });
@@ -97,6 +96,7 @@ app.post('/personal/update/:id', (req, res, next) => {
 			next(err);
             return;       
         }
+        global_password = req.body.password;
         res.redirect('/dashboard/' + req.params.id);
     });
 });
@@ -144,9 +144,6 @@ app.get('/transactions/:id', (req, res, next) => {
     });
 });
 
-/*
- *  TO DO: implement search for transaction by vendor
- */
 app.get('/search/:id', (req, res, next) => {
     let context = {};
     let query = "SELECT * FROM transactions WHERE account_id = " + req.params.id + " AND vendor_name LIKE " + "'%"+req.query.vendor+"%'";
