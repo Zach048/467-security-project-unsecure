@@ -5,6 +5,7 @@ var handlebars = require('express-handlebars').create({ defaultLayout: 'main' })
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
 var methodOverride = require('method-override');
+var crypto = require('crypto');
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
@@ -25,6 +26,13 @@ var pool = mysql.createPool({
 
 var global_password;
 
+function sha1( data ) {
+    var generator = crypto.createHash('sha1');
+    generator.update( data )  
+    return generator.digest('hex') 
+}
+
+/*
 function encryptPassword(password) {
     let context = {};
     let query = "SELECT password FROM customer WHERE password = SHA1("+"'"+password+"'"+")";
@@ -38,26 +46,28 @@ function encryptPassword(password) {
         return context.customer.password;
     });   
 };
+*/
 
 app.get('/', function(req, res, next) {
 	res.render('login');
 });
-
+    
 app.post('/login',(req, res, next) => {
     let context = {};
-    let query = "SELECT id FROM customer WHERE username = " + "'"+req.body.username+"'";
+    let query = "SELECT id, password FROM customer WHERE username = " + "'"+req.body.username+"'";
 	pool.query(query, (err, result) => {
 		if(err) {
 			next(err);
 			return;
 		}
         context.customer = result[0];
-        if(encryptPassword(req.body.password) === context.customer.password) {
-            global_password = context.customer.password;
+
+        if(sha1(req.body.password) === context.customer.password) {
+            global_password = req.body.password;
             res.redirect('/dashboard/' + context.customer.id);
         }
         else {
-            res.redirect('/login');
+            res.redirect('/');
         }
     });
 });
@@ -84,7 +94,7 @@ app.get('/personal/:id',(req, res, next) => {
  			return;
  		}
         context.customer = result[0];
-        context.customer.password = global_password; 
+        context.customer.gpassword = global_password;
  		res.render('personal', context);
     });
 });
