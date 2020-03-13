@@ -2,16 +2,16 @@
    <div class="collapse navbar-collapse" id="navbarSupportedContent">
      <ul class="navbar-nav mr-auto">
        <li class="nav-item">
-         <a class="nav-link" href="/dashboard/{{id}}">Dashboard</a>
+         <a class="nav-link" href="/dashboard/{{{id}}}">Dashboard</a>
        </li>
        <li class="nav-item active">
-         <a class="nav-link" href="/transactions/{{id}}">Transactions</a>
+         <a class="nav-link" href="/transactions/{{{id}}}">Transactions</a>
        </li>
        <li class="nav-item">
-         <a class="nav-link" href="/credit/{{id}}">Pay Credit Card</a>
+         <a class="nav-link" href="/credit/{{{id}}}">Pay Credit Card</a>
        </li>
        <li class="nav-item">
-         <a class="nav-link" href="/personal/{{id}}">Personal Information</a>
+         <a class="nav-link" href="/personal/{{{id}}}">Personal Information</a>
        </li>
      </ul>
      <ul class="navbar-nav navbar-right">
@@ -34,9 +34,9 @@
     <tbody>
       {{#each transactions}}
       <tr>
-        <td scope="row">{{ this.id }}</td>
-        <td>{{ this.vendor_name }}</td>
-        <td>{{ this.amount_paid }}</td>
+        <td scope="row">{{{ this.id }}}</td>
+        <td>{{{ this.vendor_name }}}</td>
+        <td>{{{ this.amount_paid }}}</td>
       </tr>
       {{/each}}
     </tbody>

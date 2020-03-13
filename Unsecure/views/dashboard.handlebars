@@ -2,16 +2,16 @@
    <div class="collapse navbar-collapse" id="navbarSupportedContent">
      <ul class="navbar-nav mr-auto">
        <li class="nav-item active">
-         <a class="nav-link" href="/dashboard/{{customer.id}}">Dashboard</a>
+         <a class="nav-link" href="/dashboard/{{{customer.id}}}">Dashboard</a>
        </li>
        <li class="nav-item">
-         <a class="nav-link" href="/transactions/{{customer.id}}">Transactions</a>
+         <a class="nav-link" href="/transactions/{{{customer.id}}}">Transactions</a>
        </li>
        <li class="nav-item">
-         <a class="nav-link" href="/credit/{{customer.id}}">Pay Credit Card</a>
+         <a class="nav-link" href="/credit/{{{customer.id}}}">Pay Credit Card</a>
        </li>
        <li class="nav-item">
-         <a class="nav-link" id = "personal" href="/personal/{{customer.id}}">Personal Information</a>
+         <a class="nav-link" id = "personal" href="/personal/{{{customer.id}}}">Personal Information</a>
        </li>
      </ul>
      <ul class="navbar-nav navbar-right">
@@ -33,10 +33,10 @@
      </thead>
      <tbody>
        <tr>
-         <td scope="row">{{ customer.checking_account }}</td>
+         <td scope="row">{{{ customer.checking_account }}}</td>
          <td>{{ customer.checking_balance }}</td>
          <td> 
-            <a href="/transactions/{{customer.id}}" class="btn btn-primary btn-rounded btn-sm my-0" role="button">View Transactions</a>
+            <a href="/transactions/{{{customer.id}}}" class="btn btn-primary btn-rounded btn-sm my-0" role="button">View Transactions</a>
           </td>
        </tr>
      </tbody>
@@ -49,16 +49,16 @@
     </thead>
     <tbody>
       <tr>
-        <td scope="row">{{ customer.credit_card }}</td>
-        <td>{{ customer.credit_card_balance }}</td>
+        <td scope="row">{{{ customer.credit_card }}}</td>
+        <td>{{{ customer.credit_card_balance }}}</td>
         <td>
-          <a href="/credit/{{customer.id}}" class="btn btn-primary btn-rounded btn-sm my-0" role="button">Pay Credit Card</a>
+          <a href="/credit/{{{customer.id}}}" class="btn btn-primary btn-rounded btn-sm my-0" role="button">Pay Credit Card</a>
         </td>
       </tr>
     </tbody>
    </table>
-<form action="/search/{{ customer.account_id }}" method="GET">
-  <input class="form-control" type="text" placeholder="Search for transactions..." aria-label="Search" name = "vendor" type = "submit" id = "search"  onclick="searchForTransactions({{ customer.account_id}})">
+<form action="/search/{{{ customer.account_id }}}" method="GET">
+  <input class="form-control" type="text" placeholder="Search for transactions..." aria-label="Search" name = "vendor" type = "submit" id = "search"  onclick="searchForTransactions({{{ customer.account_id }}})">
 </form>
 </ul>
 </div>

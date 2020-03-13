@@ -13,7 +13,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('port', 8080);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-// app.use(express.static('public'));
 app.use(methodOverride('_method'));
 
 var pool = mysql.createPool({
@@ -23,7 +22,7 @@ var pool = mysql.createPool({
     database        : 'unsecured_bank',
     debug           : true
 });
-
+/*
 var global_password;
 
 function sha1( data ) {
@@ -31,7 +30,7 @@ function sha1( data ) {
     generator.update( data )  
     return generator.digest('hex') 
 }
-
+*/
 /*
 function encryptPassword(password) {
     let context = {};
@@ -59,15 +58,20 @@ app.post('/login',(req, res, next) => {
 		if(err) {
 			next(err);
 			return;
-		}
+        }
         context.customer = result[0];
-
-        if(sha1(req.body.password) === context.customer.password) {
-            global_password = req.body.password;
+        try{
+            //if(sha1(req.body.password) === context.customer.password) {
+        if(req.body.password === context.customer.password){
+            //global_password = req.body.password;
             res.redirect('/dashboard/' + context.customer.id);
         }
         else {
             res.redirect('/');
+        }
+        }catch(err){
+            next(err);
+            return;
         }
     });
 });
@@ -92,21 +96,21 @@ app.get('/personal/:id',(req, res, next) => {
  		if(err) {
  			next(err);
  			return;
- 		}
+         }
         context.customer = result[0];
-        context.customer.gpassword = global_password;
+        //context.customer.gpassword = global_password;
  		res.render('personal', context);
     });
 });
 
 app.post('/personal/update/:id', (req, res, next) => {
-    let query = "UPDATE customer SET first_name = ?, last_name = ?, username = ?, password = SHA1(?), email = ?, phone = ? WHERE id = ?";
+    let query = "UPDATE customer SET first_name = ?, last_name = ?, username = ?, password = ?, email = ?, phone = ? WHERE id = ?";
     pool.query(query, [req.body.first_name, req.body.last_name, req.body.username, req.body.password, req.body.email, req.body.phone, req.params.id] , (err, result) => {
-		if(err) {
+        if(err) {
 			next(err);
             return;       
         }
-        global_password = req.body.password;
+        //global_password = req.body.password;
         res.redirect('/dashboard/' + req.params.id);
     });
 });
@@ -115,10 +119,10 @@ app.get('/credit/:id',(req, res, next) => {
     let context = {};
     let query = "SELECT customer_id, checking_balance, credit_card_balance, credit_card, checking_account FROM account WHERE customer_id = " + req.params.id;
  	pool.query(query, (err, result) => {
- 		if(err) {
+        if(err) {
  			next(err);
  			return;
- 		}
+         }
  		context.account = result[0];
  		res.render('credit', context);
     });
@@ -130,7 +134,7 @@ app.post('/credit/payment/:id', (req, res, next) => {
     let checkingAccountBalance = req.body.checking_account - req.body.amount_paid;
     let query = "UPDATE account SET checking_balance = ?, credit_card_balance = ?, credit_card = ?, checking_account = ? WHERE customer_id = ?";
     pool.query(query, [checkingAccountBalance, creditCardBalance, req.body.credit_card, req.body.checking_account, req.params.id] , (err, result) => {
-		if(err) {
+        if(err) {
 			next(err);
             return;       
         }
@@ -144,10 +148,10 @@ app.get('/transactions/:id', (req, res, next) => {
     let context = {};
     let query = "SELECT t.id, t.vendor_name, t.amount_paid FROM transactions t INNER JOIN account a ON t.account_id = a.id WHERE a.customer_id = " + req.params.id;
 	pool.query(query, (err, result) => {
-		if(err) {
+        if(err) {
 			next(err);
 			return;
-		}
+        }
         context.transactions = result;
         context.id = req.params.id;
 		res.render('transactions', context);
@@ -158,11 +162,12 @@ app.get('/search/:id', (req, res, next) => {
     let context = {};
     let query = "SELECT * FROM transactions WHERE account_id = " + req.params.id + " AND vendor_name LIKE " + "'%"+req.query.vendor+"%'";
 	pool.query(query, (err, result) => {
-		if(err) {
+        if(err) {
 			next(err);
 			return;
-		}
-		context.transactions = result;
+        }
+        context.transactions = result;
+        context.id = req.params.id;
 		res.render('transactions', context);
     });
 });
