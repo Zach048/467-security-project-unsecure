@@ -22,7 +22,7 @@ var pool = mysql.createPool({
     database        : 'unsecured_bank',
     debug           : true
 });
-/*
+
 var global_password;
 
 function sha1( data ) {
@@ -30,7 +30,7 @@ function sha1( data ) {
     generator.update( data )  
     return generator.digest('hex') 
 }
-*/
+
 /*
 function encryptPassword(password) {
     let context = {};
@@ -61,14 +61,16 @@ app.post('/login',(req, res, next) => {
         }
         context.customer = result[0];
         try{
-            //if(sha1(req.body.password) === context.customer.password) {
-        if(req.body.password === context.customer.password){
-            //global_password = req.body.password;
-            res.redirect('/dashboard/' + context.customer.id);
-        }
-        else {
-            res.redirect('/');
-        }
+            console.log(sha1(req.body.password));
+            console.log(context.customer.password);
+            if(sha1(req.body.password) === context.customer.password) {
+            //if(req.body.password === context.customer.password){
+                global_password = req.body.password;
+                res.redirect('/dashboard/' + context.customer.id);
+            }
+            else {
+                res.redirect('/');
+            }
         }catch(err){
             next(err);
             return;
@@ -98,7 +100,7 @@ app.get('/personal/:id',(req, res, next) => {
  			return;
          }
         context.customer = result[0];
-        //context.customer.gpassword = global_password;
+        context.customer.gpassword = global_password;
  		res.render('personal', context);
     });
 });
@@ -110,7 +112,7 @@ app.post('/personal/update/:id', (req, res, next) => {
 			next(err);
             return;       
         }
-        //global_password = req.body.password;
+        global_password = req.body.password;
         res.redirect('/dashboard/' + req.params.id);
     });
 });
