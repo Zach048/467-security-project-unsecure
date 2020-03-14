@@ -1,5 +1,11 @@
-# 467-security-project
-## To Run Back-End Server:
+# The Bank of Piracy
+
+## To Access Hosted Website 
+
+Access to the hosted web project requires the use of OSU 
+network Internet connection either in person or via VPN.
+
+## To Run Back-End Server Locally:
 
 1. Pull code from GitHub
 2. Navigate to 'Unsecure' directory in Terminal or any command line interface
