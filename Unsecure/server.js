@@ -162,7 +162,7 @@ app.get('/transactions/:id', (req, res, next) => {
 
 app.get('/search/:id', (req, res, next) => {
     let context = {};
-    let query = "SELECT * FROM transactions WHERE account_id = " + req.params.id + " AND vendor_name LIKE " + "'%"+req.query.vendor+"%'";
+    let query = "SELECT id, vendor_name, amount_paid FROM transactions WHERE account_id = " + req.params.id + " AND vendor_name LIKE " + "'%"+req.query.vendor+"%'";
 	pool.query(query, (err, result) => {
         if(err) {
 			next(err);
